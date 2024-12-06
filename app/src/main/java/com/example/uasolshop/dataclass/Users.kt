@@ -1,4 +1,4 @@
-package com.example.uasolshop.database
+package com.example.uasolshop.dataclass
 
 import com.google.gson.annotations.SerializedName
 

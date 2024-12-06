@@ -17,6 +17,9 @@ converter-gson = "2.6.2"
 logging-interceptor ="4.9.1"
 media3CommonKtx = "1.5.0"
 filamentAndroid = "1.17.1"
+roomCommon = "2.6.1"
+roomKtx = "2.6.1"
+roomCompiler = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -34,11 +37,14 @@ gson = {group="com.squareup.retrofit2", name="converter-gson", version.ref="conv
 http-logging-interceptor = {group="com.squareup.okhttp3", name="logging-interceptor", version.ref="logging-interceptor"}
 androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
 filament-android = { group = "com.google.ar.sceneform", name = "filament-android", version.ref = "filamentAndroid" }
+androidx-room-common = { group = "androidx.room", name = "room-common", version.ref ="roomCommon" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref ="roomCompiler" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 navigation = {id = "androidx.navigation.safeargs.kotlin", version.ref="navigation"}
-
+kotlin-kapt ={id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 
 

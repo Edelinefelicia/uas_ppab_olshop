@@ -1,14 +1,11 @@
 package com.example.uasolshop.crud
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.renderscript.ScriptGroup.Binding
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,29 +14,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.bumptech.glide.Glide
 import com.example.uasolshop.R
-import com.example.uasolshop.database.Products
-import com.example.uasolshop.databinding.FragmentHomeBinding
+import com.example.uasolshop.dataclass.Products
 import com.example.uasolshop.databinding.FragmentTambahDataBinding
 import com.example.uasolshop.network.ApiClient
-import com.example.uasolshop.network.ApiService
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 //import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
-import java.util.jar.Manifest
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

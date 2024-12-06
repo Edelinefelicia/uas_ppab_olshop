@@ -47,8 +47,11 @@ class ListProdukGuestFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.progressbar.visibility = View.VISIBLE
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
+            binding.progressbar.visibility = View.GONE
+
             // Handle back button click
             back.setOnClickListener {
                 val transaction = requireActivity().supportFragmentManager.beginTransaction()

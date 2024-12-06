@@ -1,11 +1,7 @@
 package com.example.uasolshop.crud
 
-import android.Manifest
-import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -15,22 +11,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.example.uasolshop.R
-import com.example.uasolshop.database.Products
+import com.example.uasolshop.dataclass.Products
 import com.example.uasolshop.databinding.FragmentEditDataBinding
-import com.example.uasolshop.home.HomeAdminFragment
 import com.example.uasolshop.network.ApiClient
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaType

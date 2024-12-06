@@ -1,6 +1,5 @@
 package com.example.uasolshop.productAdapter
 
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,18 +7,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.uasolshop.crud.EditDataFragment
-import com.example.uasolshop.database.Products
+import com.example.uasolshop.dataclass.Products
 import com.example.uasolshop.databinding.ItemProductsBinding
 import com.example.uasolshop.network.ApiClient
-import com.example.uasolshop.network.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 //private val client: ApiService
 //private val onDeleteClick: (Int, Int) -> Unit
 //typealias OnClickProduct = (Products) -> Unit
-class ProductAdapter(val listproduk : ArrayList<Products>, private val onEditProduct: (Products) -> Unit, private val onClickProduk: (Products) -> Unit ):RecyclerView.Adapter<ProductAdapter.ItemProductViewHolder>() {
+class ProductAdapter(val listproduk : ArrayList<Products>, private val onEditProduct: (Products) -> Unit, private val onClickProduk: (Products) -> Unit):RecyclerView.Adapter<ProductAdapter.ItemProductViewHolder>() {
     inner class ItemProductViewHolder(val binding: ItemProductsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Products) {

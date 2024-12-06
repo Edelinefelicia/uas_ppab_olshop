@@ -1,7 +1,5 @@
 package com.example.uasolshop.home
 
-import android.content.Intent
-
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,26 +8,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.uasolshop.mainactivity.MainActivityAdmin
 import com.example.uasolshop.productAdapter.ProductAdapter
 import com.example.uasolshop.R
 import com.example.uasolshop.carousel.CarouselAdapter
 import com.example.uasolshop.crud.DetailDataFragment
 import com.example.uasolshop.crud.EditDataFragment
-import com.example.uasolshop.database.Products
+import com.example.uasolshop.dataclass.Products
 import com.example.uasolshop.databinding.FragmentHomeBinding
 import com.example.uasolshop.listproduct.ListProdukFragment
 import com.example.uasolshop.network.ApiClient
-import com.example.uasolshop.network.ApiService
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -113,6 +103,7 @@ class HomeAdminFragment : Fragment() {
                 stok = product.stok,
                 deskripsiBarang = product.deskripsiBarang,
                 fotoBarang = product.fotoBarang
+
             )
             // Use parentFragmentManager to replace the fragment
             parentFragmentManager.beginTransaction()
@@ -195,130 +186,6 @@ class HomeAdminFragment : Fragment() {
         })
     }
 
-
-//    private fun deleteProduct(productId: String) {
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//                // Make the API call to delete the product by ID
-//                val response = ApiClient.getInstance().deleteProduct(productId)
-//
-//                // Handle the response
-//                withContext(Dispatchers.Main) {
-//                    if (response.isSuccessful) {
-//                        // Success: Remove item from the list and update the RecyclerView
-//                        val position = productList.indexOfFirst { it.idProduk.toString() == productId }
-//                        Log.d("posisi", position.toString())
-//                        if (position != -1) {
-//                            productList.removeAt(position)
-//
-//                            // Use the RecyclerView's adapter directly
-//                            (binding.recyclerViewtopproduct.adapter as? ProductAdapter)?.let { adapter ->
-//                                adapter.notifyItemRemoved(position)
-//                            }
-//
-//                            Toast.makeText(requireContext(), "Product deleted", Toast.LENGTH_SHORT).show()
-//                        }
-//                    } else {
-//                        // Failure: Show a failure message
-//                        Toast.makeText(requireContext(), "Failed to delete: ${response.code()}", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            } catch (e: Exception) {
-//                // Error: Show an error message if something goes wrong
-//                withContext(Dispatchers.Main) {
-//                    Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
-//    }
-//    private fun deleteProduct(productId: String) {
-//        ApiClient.getInstance().deleteProduct(productId).enqueue(object : Callback<Void> {
-//            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-//                if (response.isSuccessful) {
-//                    // Success: Remove item from the list and update the RecyclerView
-//                    val position = productList.indexOfFirst { it.idProduk.toString() == productId }
-//                    if (position != -1) {
-//                        productList.removeAt(position)
-//
-//                        // Use the RecyclerView's adapter directly
-//                        (binding.recyclerViewtopproduct.adapter as? ProductAdapter)?.let { adapter ->
-//                            adapter.notifyItemRemoved(position)
-//                        }
-//
-//                        Toast.makeText(requireContext(), "Product deleted", Toast.LENGTH_SHORT)
-//                            .show()
-//                    }
-//                } else {
-//                    Log.d("posisi", "body : ${productId}")
-//                    // Failure: Show a failure message
-//                    Toast.makeText(
-//                        requireContext(),
-//                        "Failed to delete: ${response.code()}",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<Void>, t: Throwable) {
-//                Log.e("Network Error", "Error fetching products: ${t.message}")
-//            }
-//        })
-//
-//
-//    }
-
-//    private fun fetchProducts() {
-//        val productList = ArrayList<Products>()
-//        val apiService = ApiClient.getInstance()
-//        apiService.getAllProducts().enqueue(object : Callback<List<Products>> {
-//            override fun onResponse(
-//                call: Call<List<Products>>,
-//                response: Response<List<Products>>
-//            ) {
-//                if (response.isSuccessful) {
-//                    val products = response.body()
-//
-////                    if (products != null) {
-////                        for (i in products) {
-////                            var data = Products(idProduk = i.idProduk, namaProduk   = i.namaProduk, deskripsiBarang = i.deskripsiBarang, harga = i.harga, stok = i.stok, kategori = i.kategori)
-////                            productList.add(data)
-//////                            Log.d("hi", "data.namaProduk")
-////                            Log.d("API Response", "Body: ${productList}") // Debug respons body
-////
-////
-////                        }
-////                        val adapterRetrofit = ProductAdapter(productList)
-////                        with(binding) {
-////                            recyclerViewtopproduct.apply {
-////                                adapter = adapterRetrofit
-////                                layoutManager = LinearLayoutManager(requireContext())
-////                            }
-////                        }
-////                    }
-//                    if (!products.isNullOrEmpty()) {
-//                        // Buat adapter dan hubungkan dengan RecyclerView
-//                        val adapterRetrofit = ProductAdapter(products)
-//                        with(binding) {
-//                            recyclerViewtopproduct.apply {
-//                                adapter = adapterRetrofit
-//                                layoutManager = LinearLayoutManager(requireContext())
-//                            }
-//                        }
-//                        Log.d("API Response", "Body: $products") // Debug data yang diterima
-//                    }
-//
-//                } else {
-//                    Log.e("API Error", "Error fetching products: ${response.errorBody()?.string()}")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<List<Products>>, t: Throwable) {
-//                Log.e("Network Error", "Error: ${t.message}")
-//            }
-//        })
-//    }
-//
-//
 
     private fun startAutoScroll() {
         handler.postDelayed(object : Runnable {

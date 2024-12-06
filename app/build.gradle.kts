@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.navigation)
+    alias(libs.plugins.kotlin.kapt)
 
 }
 
@@ -41,6 +42,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
 
     implementation ("com.github.bumptech.glide:glide:4.15.1")
     implementation(libs.androidx.media3.common.ktx)

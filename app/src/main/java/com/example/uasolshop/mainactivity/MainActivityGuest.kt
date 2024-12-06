@@ -1,11 +1,14 @@
 package com.example.uasolshop.mainactivity
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.DatePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.uasolshop.BookingFragment.BookingFragment
 import com.example.uasolshop.profile.ProfileFragment
 import com.example.uasolshop.R
 import com.example.uasolshop.databinding.ActivityMainGuestBinding
@@ -15,7 +18,8 @@ import com.example.uasolshop.home.HomeGuestFragment
 import com.example.uasolshop.listproduct.ListProdukFragment
 import com.example.uasolshop.listproduct.guest.ListProdukGuestFragment
 
-class MainActivityGuest : AppCompatActivity() {
+class MainActivityGuest : AppCompatActivity() , DatePickerDialog.OnDateSetListener {
+
     private val handler = Handler(Looper.getMainLooper())
     private var currentPage = 0
     private lateinit var images: List<Int>
@@ -74,5 +78,9 @@ class MainActivityGuest : AppCompatActivity() {
                     R.id.listProdukGuestFragment
             }
         }
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, day: Int) {
+        val selectedDate = "$day/${month + 1}/$year"
     }
 }

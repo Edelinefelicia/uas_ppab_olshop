@@ -1,6 +1,5 @@
 package com.example.uasolshop.listproduct
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,12 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.uasolshop.R
 import com.example.uasolshop.crud.DetailDataFragment
 import com.example.uasolshop.crud.EditDataFragment
-import com.example.uasolshop.database.Products
+import com.example.uasolshop.dataclass.Products
 import com.example.uasolshop.productAdapter.ProductAdapter
 import com.example.uasolshop.databinding.FragmentSemenBinding
 import com.example.uasolshop.network.ApiClient

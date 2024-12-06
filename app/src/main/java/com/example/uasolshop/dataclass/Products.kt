@@ -1,7 +1,9 @@
-package com.example.uasolshop.database
+package com.example.uasolshop.dataclass
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "produkGB")
 data class Products(
     @SerializedName("_id")
     val id: String,

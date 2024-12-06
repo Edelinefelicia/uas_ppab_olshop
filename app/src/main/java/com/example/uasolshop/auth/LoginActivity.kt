@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.uasolshop.database.Users
+import com.example.uasolshop.dataclass.Users
 import com.example.uasolshop.mainactivity.MainActivityAdmin
 import com.example.uasolshop.mainactivity.MainActivityGuest
 import com.example.uasolshop.databinding.ActivityLoginBinding
