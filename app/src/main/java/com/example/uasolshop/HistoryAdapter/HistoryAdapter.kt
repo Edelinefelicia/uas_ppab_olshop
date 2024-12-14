@@ -18,8 +18,9 @@ class HistoryAdapter(val listbookhistory : List<History>):RecyclerView.Adapter<H
                 namaproduct1.text = data.namaProduk
                 hargaproduct1.text = data.harga.toString()
                 kategoriproduct1.text = data.kategori
+                Log.d("home", data.banyak_book.toString())
                 banyakbook2.text = data.banyak_book.toString()
-                Log.d("home", data.fotoBarang.toString())
+
                 Glide.with(itemView.context)
                     .load(data.fotoBarang) // pastikan `data.imageUrl` adalah URL gambar yang valid
                     .into(fotoProduk)

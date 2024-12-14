@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.uasolshop.R
@@ -15,10 +16,12 @@ import com.example.uasolshop.crud.EditDataFragment
 import com.example.uasolshop.dataclass.Products
 import com.example.uasolshop.productAdapter.ProductAdapter
 import com.example.uasolshop.databinding.FragmentAllBinding
+import com.example.uasolshop.loading.LoadingFragment
 import com.example.uasolshop.network.ApiClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.ref.WeakReference
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -73,6 +76,16 @@ class AllFragment(parentFragment: FragmentManager) : Fragment() {
     }
 
     private fun fetchProducts(binding: FragmentAllBinding) {
+//        val fragmentWeakReference = WeakReference(this)
+//
+//        val loadingFragment = LoadingFragment()
+//
+//        // Safely check if the fragment is still attached before showing loading
+//        fragmentWeakReference.get()?.let { fragment ->
+//            if (fragment.isAdded && !fragment.isDetached) {
+//                fragment.parentFragment?.let { loadingFragment.show(it.parentFragmentManager, "LoadingFragment") }
+//            }
+//        }
         val apiService = ApiClient.getInstance()
 
         apiService.getAllProducts().enqueue(object : Callback<List<Products>> {
@@ -80,93 +93,125 @@ class AllFragment(parentFragment: FragmentManager) : Fragment() {
                 call: Call<List<Products>>,
                 response: Response<List<Products>>
             ) {
-                if (response.isSuccessful) {
-                    val products = response.body()
+//                fragmentWeakReference.get()?.let { fragment ->
+//                    // Ensure the fragment is still in a valid state
+//                    if (fragment.isAdded && !fragment.isDetached) {
+//                        // Dismiss loading fragment
+//                        val loadingDialogFragment =
+//                            fragment.parentFragmentManager.findFragmentByTag("LoadingFragment")
+//                        if (loadingDialogFragment is DialogFragment) {
+//                            loadingDialogFragment.dismiss()
+//                        }
+                        if (response.isSuccessful) {
+                            binding.textLoading.visibility = View.GONE;
+                            val products = response.body()
 
-                    if (!products.isNullOrEmpty()) {
-                        // Clear existing list before adding new products
-                        productList.clear()
-                        productList.addAll(products)
+                            if (!products.isNullOrEmpty()) {
+                                // Clear existing list before adding new products
+                                productList.clear()
 
-                        Log.d("api ini", "body: $productList")
+                                productList.addAll(products.reversed())
 
-                        // Prepare adapter with click listener
-                        val adapterRetrofit = ProductAdapter(productList,  onEditProduct =   { product ->
-                            try {
-                                // Create EditDataFragment
-                                val editDataFragment = EditDataFragment.newInstance(
-                                    id = product.id,
-                                    namaProduk = product.namaProduk,
-                                    kategori = product.kategori,
-                                    harga = product.harga,
-                                    stok = product.stok,
-                                    deskripsiBarang = product.deskripsiBarang,
-                                    fotoBarang = product.fotoBarang
-                                )
+                                Log.d("api ini", "body: $productList")
 
-                                // Perform fragment transaction
-                                parentFragment?.parentFragmentManager?.beginTransaction()
-                                    ?.replace(R.id.fragment_container, editDataFragment)
-                                    ?.addToBackStack(null)
-                                    ?.commit()
+                                // Prepare adapter with click listener
+                                val adapterRetrofit =
+                                    ProductAdapter(productList, onEditProduct = { product ->
+                                        try {
+                                            // Create EditDataFragment
+                                            val editDataFragment = EditDataFragment.newInstance(
+                                                id = product.id,
+                                                namaProduk = product.namaProduk,
+                                                kategori = product.kategori,
+                                                harga = product.harga,
+                                                stok = product.stok,
+                                                deskripsiBarang = product.deskripsiBarang,
+                                                fotoBarang = product.fotoBarang
+                                            )
 
-                                Log.d("Navigation", "Navigating to EditDataFragment for product: ${product.namaProduk}")
-                            } catch (e: Exception) {
-                                Log.e("Navigation Error", "Failed to navigate to EditDataFragment", e)
+                                            // Perform fragment transaction
+                                            parentFragment?.parentFragmentManager?.beginTransaction()
+                                                ?.replace(R.id.fragment_container, editDataFragment)
+                                                ?.addToBackStack(null)
+                                                ?.commit()
+
+                                            Log.d(
+                                                "Navigation",
+                                                "Navigating to EditDataFragment for product: ${product.namaProduk}"
+                                            )
+                                        } catch (e: Exception) {
+                                            Log.e(
+                                                "Navigation Error",
+                                                "Failed to navigate to EditDataFragment",
+                                                e
+                                            )
+                                            Toast.makeText(
+                                                requireContext(),
+                                                "Error navigating to edit page",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }, onClickProduk = { product ->
+                                        val detaildataFragment = DetailDataFragment.newInstance(
+                                            id = product.id,
+                                            namaProduk = product.namaProduk,
+                                            kategori = product.kategori,
+                                            harga = product.harga,
+                                            stok = product.stok,
+                                            deskripsiBarang = product.deskripsiBarang,
+                                            fotoBarang = product.fotoBarang
+                                        )
+                                        // Use parentFragmentManager to replace the fragment
+                                        parentFragment?.parentFragmentManager?.beginTransaction()
+                                            ?.replace(R.id.fragment_container, detaildataFragment)
+                                            ?.addToBackStack(null)
+                                            ?.commit()
+
+                                    })
+                                binding.recyclerViewtopproduct.apply {
+                                    layoutManager = GridLayoutManager(context, 2)
+                                    adapter = adapterRetrofit
+                                }
+
+                                Log.d("FetchProducts", "Product list size: ${productList.size}")
+                            } else {
+                                Log.e("FetchProducts", "Product list is empty")
                                 Toast.makeText(
                                     requireContext(),
-                                    "Error navigating to edit page",
+                                    "No products found",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                            }},onClickProduk = { product ->
-                            val detaildataFragment = DetailDataFragment.newInstance(
-                                id = product.id,
-                                namaProduk = product.namaProduk,
-                                kategori = product.kategori,
-                                harga = product.harga,
-                                stok = product.stok,
-                                deskripsiBarang = product.deskripsiBarang,
-                                fotoBarang = product.fotoBarang
-                            )
-                            // Use parentFragmentManager to replace the fragment
-                            parentFragment?.parentFragmentManager?.beginTransaction()
-                                ?.replace(R.id.fragment_container, detaildataFragment)
-                                ?.addToBackStack(null)
-                                ?.commit()
-
-                        })
-                        binding.recyclerViewtopproduct.apply {
-                            layoutManager = GridLayoutManager(context, 2)
-                            adapter = adapterRetrofit
+                            }
+                        } else {
+                            Log.e("API Error", "Error response: ${response.errorBody()?.string()}")
+                            Toast.makeText(
+                                requireContext(),
+                                "Failed to fetch products",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-
-                        Log.d("FetchProducts", "Product list size: ${productList.size}")
-                    } else {
-                        Log.e("FetchProducts", "Product list is empty")
+//                    }
+//                }
+            }
+            override fun onFailure(call: Call<List<Products>>, t: Throwable) {
+//                fragmentWeakReference.get()?.let { fragment ->
+//                    // Ensure the fragment is still in a valid state
+//                    if (fragment.isAdded && !fragment.isDetached) {
+//                        // Dismiss loading fragment
+//                        val loadingDialogFragment =
+//                            fragment.parentFragmentManager.findFragmentByTag("LoadingFragment")
+//                        if (loadingDialogFragment is DialogFragment) {
+//                            loadingDialogFragment.dismiss()
+//                        }
+                        Log.e("Network Error", "Error fetching products: ${t.message}")
                         Toast.makeText(
                             requireContext(),
-                            "No products found",
+                            "Network error: ${t.message}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                } else {
-                    Log.e("API Error", "Error response: ${response.errorBody()?.string()}")
-                    Toast.makeText(
-                        requireContext(),
-                        "Failed to fetch products",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-            override fun onFailure(call: Call<List<Products>>, t: Throwable) {
-                Log.e("Network Error", "Error fetching products: ${t.message}")
-                Toast.makeText(
-                    requireContext(),
-                    "Network error: ${t.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+//                }
+//            }
         })
     }
 //    private fun deleteProduct(productId: String) {

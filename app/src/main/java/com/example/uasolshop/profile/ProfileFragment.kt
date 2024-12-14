@@ -55,6 +55,7 @@ class ProfileFragment : Fragment() {
 
         with(binding) {
             tvUsername.text = username
+            tvPassword.text = "*".repeat(password.length)
 
             // Handle toggle password visibility
             btnTogglePassword.setOnClickListener {

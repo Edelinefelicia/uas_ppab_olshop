@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bgprofil"
     tools:context=".profile.ProfileFragment">
 <!--    header-->
     <LinearLayout
@@ -22,7 +23,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logonya" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,9 +56,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Username:"
-            android:textSize="20sp"
+            android:textSize="18sp"
+            android:fontFamily="@font/poppinsmedium"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
         <TextView
@@ -65,8 +67,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="JohnDoe"
-            android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppinsbold"
+            android:textSize="22sp"
             app:layout_constraintTop_toTopOf="@id/tvUsernameLabel"
             app:layout_constraintStart_toEndOf="@id/tvUsernameLabel"
             android:layout_marginStart="8dp" />
@@ -78,7 +81,8 @@
             android:layout_height="wrap_content"
             android:text="Password:"
             android:textSize="20sp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppinsmedium"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/tvUsernameLabel"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,9 +91,10 @@
             android:id="@+id/tvPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="********"
-            android:textSize="20sp"
-            android:textColor="@color/white"
+            android:text=""
+            android:textSize="22sp"
+            android:fontFamily="@font/poppinsbold"
+            android:textColor="@color/black"
             app:layout_constraintTop_toTopOf="@id/tvPasswordLabel"
             app:layout_constraintStart_toEndOf="@id/tvPasswordLabel"
             android:layout_marginStart="8dp" />
@@ -102,7 +107,7 @@
             android:layout_marginLeft="10dp"
             android:background="@null"
             android:src="@drawable/ic_visibility_off"
-            app:tint="@color/white"
+            app:tint="@color/black"
             app:layout_constraintStart_toEndOf="@id/tvPassword"
             app:layout_constraintTop_toTopOf="@id/tvPassword" />
 

@@ -46,7 +46,7 @@ class RegisterActivity : AppCompatActivity() {
                 } else {
                     val generatedId = generateId()
                     val role = "guest"
-                    val newUser = Users(id = generatedId.toString(), username = username, password = password, role = role)
+                    val newUser = Users( username = username, password = password, role = role)
 
                     // Call the API to create the user
 
@@ -85,7 +85,7 @@ class RegisterActivity : AppCompatActivity() {
                             // Show error message to the user
                             Toast.makeText(this@RegisterActivity, "Username already exists", Toast.LENGTH_SHORT).show()
                         } else {
-//                            Log.d("CheckUsername", "Username is available: $inputUsername")
+                            Log.d("CheckUsername", "Username is available: $user")
                             // Proceed with signup
                             createUser(user)
                         }
@@ -159,9 +159,11 @@ class RegisterActivity : AppCompatActivity() {
 
         // Increment counter to ensure uniqueness
         counter++
-
+        Log.d("id", "body : ${counter}")
+        Log.d("id", "body : ${multipleOf}")
+        Log.d("id", "body : ${(multipleOf/ counter ) * multipleOf}")
         // Make sure the ID is a multiple of the specified number
-        return (counter / multipleOf) * multipleOf
+        return (multipleOf/ counter ) * multipleOf
     }
 
     private fun checkLoginStatus() {

@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.uasolshop.mainactivity.MainActivityGuest
 import com.example.uasolshop.productAdapter.ProductGuestAdapter
@@ -19,11 +20,13 @@ import com.example.uasolshop.crud.DetailDataFragment
 import com.example.uasolshop.databinding.FragmentHomeGuestBinding
 import com.example.uasolshop.dataclass.Products
 import com.example.uasolshop.listproduct.guest.ListProdukGuestFragment
+import com.example.uasolshop.loading.LoadingFragment
 import com.example.uasolshop.network.ApiClient
 import com.google.android.material.tabs.TabLayoutMediator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.ref.WeakReference
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -65,14 +68,30 @@ class HomeGuestFragment : Fragment() {
         fetchProducts(binding)
         with(binding){
             tvSeeAll.setOnClickListener {
-                (activity as MainActivityGuest).setFragment(ListProdukGuestFragment(), keepNavOnHome = true)
+                navigateToTab(0)
             }
+            kategoriall.setOnClickListener{
+                navigateToTab(0)
+            }
+            kategoriSemen.setOnClickListener{
+                navigateToTab(1)
+            }
+            kategoriBesi.setOnClickListener{
+                navigateToTab(2)
+            }
+            kategorilainnya.setOnClickListener{
+                navigateToTab(3)
+            }
+
+
         }
         // Initialize image data
         images = listOf(
-            R.drawable.logo,
-            R.drawable.logo,
-            R.drawable.logo
+            R.drawable.img1,
+            R.drawable.img3,
+            R.drawable.img4,
+            R.drawable.img5,
+            R.drawable.img6
         )
 
         // Set up ViewPager2 with adapter
@@ -84,6 +103,19 @@ class HomeGuestFragment : Fragment() {
 
         // Start Auto-Scroll
         startAutoScroll()
+    }
+
+    private fun navigateToTab(tabIndex: Int) {
+        val fragment = ListProdukGuestFragment().apply {
+            arguments = Bundle().apply {
+                putInt("TAB_INDEX", tabIndex)
+            }
+        }
+        Log.d("argumen" , "bodi : ${tabIndex}")
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.mainGuest, fragment) // Sesuaikan dengan ID container Anda
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun setupRecyclerView(binding: FragmentHomeGuestBinding) {
@@ -121,12 +153,23 @@ class HomeGuestFragment : Fragment() {
 
         })
         binding.recyclerViewtopproduct.apply {
-            layoutManager = GridLayoutManager(context, 2)
             adapter = adapterRetrofit
+
+            layoutManager = GridLayoutManager(context, 2)
         }
     }
 
     private fun fetchProducts(binding: FragmentHomeGuestBinding) {
+        val fragmentWeakReference = WeakReference(this)
+
+        val loadingFragment = LoadingFragment()
+
+        // Safely check if the fragment is still attached before showing loading
+        fragmentWeakReference.get()?.let { fragment ->
+            if (fragment.isAdded && !fragment.isDetached) {
+                loadingFragment.show(fragment.parentFragmentManager, "LoadingFragment")
+            }
+        }
 //        binding.progressbar.visibility = View.VISIBLE
         val apiService = ApiClient.getInstance()
 
@@ -135,36 +178,62 @@ class HomeGuestFragment : Fragment() {
                 call: Call<List<Products>>,
                 response: Response<List<Products>>
             ) {
-                binding.progressbar.visibility = View.GONE
-                if (response.isSuccessful) {
-                    val products = response.body()
-                    Log.d("listproduk", "body : ${products}")
-                    if (!products.isNullOrEmpty()) {
-                        val reversedProducts = products.reversed()
-                        val limitedProducts = reversedProducts.take(6)
+                fragmentWeakReference.get()?.let { fragment ->
+                    // Ensure the fragment is still in a valid state
+                    if (fragment.isAdded && !fragment.isDetached) {
+                        // Dismiss loading fragment
+                        val loadingDialogFragment =
+                            fragment.parentFragmentManager.findFragmentByTag("LoadingFragment")
+                        if (loadingDialogFragment is DialogFragment) {
+                            loadingDialogFragment.dismiss()
+                        }
+                        if (response.isSuccessful) {
+                            val products = response.body()
+                            Log.d("listproduk", "body : ${products}")
+                            if (!products.isNullOrEmpty()) {
+                                val reversedProducts = products.reversed()
+                                val limitedProducts = reversedProducts.take(6)
 
-                        Log.d("FetchProducts", "Reversed products: $reversedProducts")
-                        Log.d("FetchProducts", "Limited products: $limitedProducts")
+                                Log.d("FetchProducts", "Reversed products: $reversedProducts")
+                                Log.d("FetchProducts", "Limited products: $limitedProducts")
 
 //                        productList.addAll(limitedProducts)
 //                        Log.d("FetchProducts", "Product list after addAll: $productList")
 
-                        adapterRetrofit.updateData(limitedProducts)
-                        Log.d("FetchProducts", "Product list after addAllsize1: ${productList.size}")
+                                adapterRetrofit.updateData(limitedProducts)
+                                Log.d(
+                                    "FetchProducts",
+                                    "Product list after addAllsize1: ${productList.size}"
+                                )
 
 //                        binding.recyclerViewtopproduct.adapter = adapterRetrofit
-                        Log.d("FetchProducts", "Product list after addAllsize: ${productList.size}")
-                    } else {
-                        Log.e("FetchProducts", "Product list is empty")
+                                Log.d(
+                                    "FetchProducts",
+                                    "Product list after addAllsize: ${productList.size}"
+                                )
+                            } else {
+                                Log.e("FetchProducts", "Product list is empty")
+                            }
+                        } else {
+                            Log.e("API Error", "Error response: ${response.errorBody()?.string()}")
+                        }
                     }
-                } else {
-                    Log.e("API Error", "Error response: ${response.errorBody()?.string()}")
                 }
             }
 
             override fun onFailure(call: Call<List<Products>>, t: Throwable) {
-                binding.progressbar.visibility = View.GONE
-                Log.e("Network Error", "Error fetching products: ${t.message}")
+                fragmentWeakReference.get()?.let { fragment ->
+                    // Ensure the fragment is still in a valid state
+                    if (fragment.isAdded && !fragment.isDetached) {
+                        // Dismiss loading fragment
+                        val loadingDialogFragment =
+                            fragment.parentFragmentManager.findFragmentByTag("LoadingFragment")
+                        if (loadingDialogFragment is DialogFragment) {
+                            loadingDialogFragment.dismiss()
+                        }
+                        Log.e("Network Error", "Error fetching products: ${t.message}")
+                    }
+                }
             }
         })
     }

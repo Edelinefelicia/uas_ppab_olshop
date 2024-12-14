@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.uasolshop.BookingFragment.BookingFragment
 import com.example.uasolshop.R
@@ -15,12 +16,14 @@ import com.example.uasolshop.crud.EditDataFragment
 import com.example.uasolshop.databinding.FragmentAllBinding
 import com.example.uasolshop.databinding.FragmentAllGuestBinding
 import com.example.uasolshop.dataclass.Products
+import com.example.uasolshop.loading.LoadingFragment
 import com.example.uasolshop.network.ApiClient
 import com.example.uasolshop.productAdapter.ProductAdapter
 import com.example.uasolshop.productAdapter.ProductGuestAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.ref.WeakReference
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,89 +78,96 @@ class AllGuestFragment : Fragment() {
                 call: Call<List<Products>>,
                 response: Response<List<Products>>
             ) {
-                if (response.isSuccessful) {
-                    val products = response.body()
 
-                    if (!products.isNullOrEmpty()) {
-                        // Clear existing list before adding new products
-                        productList.clear()
-                        productList.addAll(products)
+                        if (response.isSuccessful) {
+                            binding.textLoading.visibility = View.GONE;
+                            val products = response.body()
 
-                        Log.d("api ini all", "body: $productList")
-                        adapterRetrofit = ProductGuestAdapter(productList, onBookProduk = { product ->
-                            val bookFragment = BookingFragment.newInstance(
-                                id = product.id,
-                                namaProduk = product.namaProduk,
-                                kategori = product.kategori,
-                                harga = product.harga,
-                                stok = product.stok,
-                                deskripsiBarang = product.deskripsiBarang,
-                                fotoBarang = product.fotoBarang
-                            )
-                            // Use parentFragmentManager to replace the fragment
+                            if (!products.isNullOrEmpty()) {
+                                // Clear existing list before adding new products
+                                productList.clear()
+                                productList.addAll(products.reversed())
+
+                                Log.d("api ini all", "body: $productList")
+                                adapterRetrofit =
+                                    ProductGuestAdapter(productList, onBookProduk = { product ->
+                                        val bookFragment = BookingFragment.newInstance(
+                                            id = product.id,
+                                            namaProduk = product.namaProduk,
+                                            kategori = product.kategori,
+                                            harga = product.harga,
+                                            stok = product.stok,
+                                            deskripsiBarang = product.deskripsiBarang,
+                                            fotoBarang = product.fotoBarang
+                                        )
+                                        // Use parentFragmentManager to replace the fragment
 //                            parentFragmentManager.beginTransaction()
 //                                .replace(R.id.mainGuest, bookFragment)
 //                                .addToBackStack(null) // Add to back stack so you can navigate back
 //                                .commit()
-                            parentFragment?.parentFragmentManager?.beginTransaction()
-                                ?.replace(R.id.mainGuest, bookFragment)
-                                ?.addToBackStack(null) // Add to back stack so you can navigate back
-                                ?.commit()
-                            Log.d("FragmentTransaction", "Navigating to BookingFragment")
-                        },onClickProduk = { product ->
-                            val detaildataFragment = DetailDataFragment.newInstance(
-                                id = product.id,
-                                namaProduk = product.namaProduk,
-                                kategori = product.kategori,
-                                harga = product.harga,
-                                stok = product.stok,
-                                deskripsiBarang = product.deskripsiBarang,
-                                fotoBarang = product.fotoBarang
-                            )
-                            // Use parentFragmentManager to replace the fragment
+                                        parentFragment?.parentFragmentManager?.beginTransaction()
+                                            ?.replace(R.id.mainGuest, bookFragment)
+                                            ?.addToBackStack(null) // Add to back stack so you can navigate back
+                                            ?.commit()
+                                        Log.d(
+                                            "FragmentTransaction",
+                                            "Navigating to BookingFragment"
+                                        )
+                                    }, onClickProduk = { product ->
+                                        val detaildataFragment = DetailDataFragment.newInstance(
+                                            id = product.id,
+                                            namaProduk = product.namaProduk,
+                                            kategori = product.kategori,
+                                            harga = product.harga,
+                                            stok = product.stok,
+                                            deskripsiBarang = product.deskripsiBarang,
+                                            fotoBarang = product.fotoBarang
+                                        )
+                                        // Use parentFragmentManager to replace the fragment
 //                            parentFragmentManager.beginTransaction()
 //                                .replace(R.id.mainGuest, detaildataFragment)
 //                                .addToBackStack(null) // Add to back stack so you can navigate back
 //                                .commit()
-                            parentFragment?.parentFragmentManager?.beginTransaction()
-                                ?.replace(R.id.mainGuest, detaildataFragment)
-                                ?.addToBackStack(null)
-                                ?.commit()
+                                        parentFragment?.parentFragmentManager?.beginTransaction()
+                                            ?.replace(R.id.mainGuest, detaildataFragment)
+                                            ?.addToBackStack(null)
+                                            ?.commit()
 
-                        })
-                        binding.recyclerViewtopproduct.apply {
-                            layoutManager = GridLayoutManager(context, 2)
-                            adapter = adapterRetrofit
+                                    })
+                                binding.recyclerViewtopproduct.apply {
+                                    layoutManager = GridLayoutManager(context, 2)
+                                    adapter = adapterRetrofit
+                                }
+                                // Prepare adapter with click listener
+                                adapterRetrofit.updateData(products)
+                                Log.d("FetchProducts", "Product list size: ${productList.size}")
+                            } else {
+                                Log.e("FetchProducts", "Product list is empty")
+                                Toast.makeText(
+                                    requireContext(),
+                                    "No products found",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else {
+                            Log.e("API Error", "Error response: ${response.errorBody()?.string()}")
+                            Toast.makeText(
+                                requireContext(),
+                                "Failed to fetch products",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        // Prepare adapter with click listener
-//                        adapterRetrofit.updateData(products)
-                        Log.d("FetchProducts", "Product list size: ${productList.size}")
-                    } else {
-                        Log.e("FetchProducts", "Product list is empty")
+                    }
+
+            override fun onFailure(call: Call<List<Products>>, t: Throwable) {
+                        Log.e("Network Error", "Error fetching products: ${t.message}")
                         Toast.makeText(
                             requireContext(),
-                            "No products found",
+                            "Network error: ${t.message}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                } else {
-                    Log.e("API Error", "Error response: ${response.errorBody()?.string()}")
-                    Toast.makeText(
-                        requireContext(),
-                        "Failed to fetch products",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
 
-            override fun onFailure(call: Call<List<Products>>, t: Throwable) {
-                Log.e("Network Error", "Error fetching products: ${t.message}")
-                Toast.makeText(
-                    requireContext(),
-                    "Network error: ${t.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
         })
     }
     companion object {

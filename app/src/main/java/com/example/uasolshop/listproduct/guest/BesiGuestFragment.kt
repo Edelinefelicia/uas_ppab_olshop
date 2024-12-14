@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.uasolshop.BookingFragment.BookingFragment
 import com.example.uasolshop.R
@@ -15,12 +16,14 @@ import com.example.uasolshop.crud.EditDataFragment
 import com.example.uasolshop.databinding.FragmentBesiBinding
 import com.example.uasolshop.databinding.FragmentBesiGuestBinding
 import com.example.uasolshop.dataclass.Products
+import com.example.uasolshop.loading.LoadingFragment
 import com.example.uasolshop.network.ApiClient
 import com.example.uasolshop.productAdapter.ProductAdapter
 import com.example.uasolshop.productAdapter.ProductGuestAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.ref.WeakReference
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -72,7 +75,6 @@ class BesiGuestFragment : Fragment() {
 
 
     private fun fetchProducts(binding: FragmentBesiGuestBinding) {
-
         val apiService = ApiClient.getInstance()
 
         apiService.getAllProducts().enqueue(object : Callback<List<Products>> {
@@ -80,71 +82,77 @@ class BesiGuestFragment : Fragment() {
                 call: Call<List<Products>>,
                 response: Response<List<Products>>
             ) {
-                if (response.isSuccessful) {
-                    val products = response.body()
+                        if (response.isSuccessful) {
+                            binding.textLoading.visibility = View.GONE;
+                            val products = response.body()
 
-                    if (!products.isNullOrEmpty()) {
-                        val filteredProducts = products.filter { it.kategori == "Besi" }
-                        // Tambahkan data ke ArrayList
-                        productList.clear()
-                        productList.addAll(filteredProducts)
-                        ////                        for (i in products) {
+                            if (!products.isNullOrEmpty()) {
+                                val filteredProducts = products.filter { it.kategori == "Besi" }
+                                // Tambahkan data ke ArrayList
+                                productList.clear()
+                                productList.addAll(filteredProducts.reversed())
+                                ////                        for (i in products) {
 ////                            var data = Products(idProduk = i.idProduk, namaProduk   = i.namaProduk, deskripsiBarang = i.deskripsiBarang, harga = i.harga, stok = i.stok, kategori = i.kategori)
 ////                            productList.add(data)
-                        Log.d("api ini besi", "body:{$productList}")
-                        adapterRetrofit = ProductGuestAdapter(productList, onBookProduk = { product ->
-                            val bookFragment = BookingFragment.newInstance(
-                                id = product.id,
-                                namaProduk = product.namaProduk,
-                                kategori = product.kategori,
-                                harga = product.harga,
-                                stok = product.stok,
-                                deskripsiBarang = product.deskripsiBarang,
-                                fotoBarang = product.fotoBarang
-                            )
-                            // Use parentFragmentManager to replace the fragment
-                            parentFragment?.parentFragmentManager?.beginTransaction()
-                                ?.replace(R.id.mainGuest, bookFragment)
-                                ?.addToBackStack(null) // Add to back stack so you can navigate back
-                                ?.commit()
-                            Log.d("FragmentTransaction", "Navigating to BookingFragment")
-                        },onClickProduk = { product ->
-                            val detaildataFragment = DetailDataFragment.newInstance(
-                                id = product.id,
-                                namaProduk = product.namaProduk,
-                                kategori = product.kategori,
-                                harga = product.harga,
-                                stok = product.stok,
-                                deskripsiBarang = product.deskripsiBarang,
-                                fotoBarang = product.fotoBarang
-                            )
-                            // Use parentFragmentManager to replace the fragment
-                            parentFragment?.parentFragmentManager?.beginTransaction()
-                                ?.replace(R.id.mainGuest, detaildataFragment)
-                                ?.addToBackStack(null)
-                                ?.commit()
+                                Log.d("api ini besi", "body:{$productList}")
+                                adapterRetrofit =
+                                    ProductGuestAdapter(productList, onBookProduk = { product ->
+                                        val bookFragment = BookingFragment.newInstance(
+                                            id = product.id,
+                                            namaProduk = product.namaProduk,
+                                            kategori = product.kategori,
+                                            harga = product.harga,
+                                            stok = product.stok,
+                                            deskripsiBarang = product.deskripsiBarang,
+                                            fotoBarang = product.fotoBarang
+                                        )
+                                        // Use parentFragmentManager to replace the fragment
+                                        parentFragment?.parentFragmentManager?.beginTransaction()
+                                            ?.replace(R.id.mainGuest, bookFragment)
+                                            ?.addToBackStack(null) // Add to back stack so you can navigate back
+                                            ?.commit()
+                                        Log.d(
+                                            "FragmentTransaction",
+                                            "Navigating to BookingFragment"
+                                        )
+                                    }, onClickProduk = { product ->
+                                        val detaildataFragment = DetailDataFragment.newInstance(
+                                            id = product.id,
+                                            namaProduk = product.namaProduk,
+                                            kategori = product.kategori,
+                                            harga = product.harga,
+                                            stok = product.stok,
+                                            deskripsiBarang = product.deskripsiBarang,
+                                            fotoBarang = product.fotoBarang
+                                        )
+                                        // Use parentFragmentManager to replace the fragment
+                                        parentFragment?.parentFragmentManager?.beginTransaction()
+                                            ?.replace(R.id.mainGuest, detaildataFragment)
+                                            ?.addToBackStack(null)
+                                            ?.commit()
 
-                        })
-                        binding.recyclerViewtopproduct.apply {
-                            layoutManager = GridLayoutManager(context, 2)
-                            adapter = adapterRetrofit
+                                    })
+                                binding.recyclerViewtopproduct.apply {
+                                    layoutManager = GridLayoutManager(context, 2)
+                                    adapter = adapterRetrofit
+                                }
+                                // Siapkan adapter dan set ke RecyclerView
+                                adapterRetrofit.updateData(filteredProducts)
+
+                                // Log untuk debug
+                                Log.d("FetchProducts", "Product list size: ${productList.size}")
+                            } else {
+                                Log.e("FetchProducts", "Product list is empty")
+                            }
+                        } else {
+                            Log.e("API Error", "Error response: ${response.errorBody()?.string()}")
                         }
-                        // Siapkan adapter dan set ke RecyclerView
-//                        adapterRetrofit.updateData(filteredProducts)
-
-                        // Log untuk debug
-                        Log.d("FetchProducts", "Product list size: ${productList.size}")
-                    } else {
-                        Log.e("FetchProducts", "Product list is empty")
                     }
-                } else {
-                    Log.e("API Error", "Error response: ${response.errorBody()?.string()}")
-                }
-            }
 
             override fun onFailure(call: Call<List<Products>>, t: Throwable) {
-                Log.e("Network Error", "Error fetching products: ${t.message}")
-            }
+
+                        Log.e("Network Error", "Error fetching products: ${t.message}")
+                    }
         })
     }
 

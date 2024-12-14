@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.uasolshop.R
 import com.example.uasolshop.databinding.FragmentListProdukBinding
 import com.example.uasolshop.databinding.FragmentListProdukGuestBinding
@@ -47,16 +48,24 @@ class ListProdukGuestFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.progressbar.visibility = View.VISIBLE
+//        binding.progressbar.visibility = View.VISIBLE
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
-            binding.progressbar.visibility = View.GONE
+//            binding.progressbar.visibility = View.GONE
 
             // Handle back button click
             back.setOnClickListener {
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.mainGuest, HomeGuestFragment()) // Replace fragment
-                transaction.commit()
+//                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//                transaction.replace(R.id.mainGuest, HomeGuestFragment()) // Replace fragment
+//                transaction.commit()
+                if (parentFragmentManager.backStackEntryCount > 0) {
+                    // Jika ada fragment sebelumnya di back stack
+                    parentFragmentManager.popBackStack()
+//                    Toast.makeText(requireContext(), "Navigated back successfully", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Jika tidak ada fragment di back stack
+                    Toast.makeText(requireContext(), "No previous fragment to go back to", Toast.LENGTH_SHORT).show()
+                }
 //                findNavController().navigateUp()
 //                if (requireActivity().supportFragmentManager.backStackEntryCount > 0) {
 //                    requireActivity().onBackPressed() // Use onBackPressedDispatcher
@@ -66,6 +75,7 @@ class ListProdukGuestFragment : Fragment() {
 //                }
             }
 
+            val tabIndex = arguments?.getInt("TAB_INDEX", 0) ?: 0
             // Initialize TabLayout and ViewPager
             val pagerGuestAdapter = PagerGuestAdapter(this@ListProdukGuestFragment) // Replace with actual FragmentPagerAdapter
             viewPager.adapter = pagerGuestAdapter
@@ -91,6 +101,11 @@ class ListProdukGuestFragment : Fragment() {
                     }
                 }
             }.attach()
+
+
+            viewPager.post {
+                viewPager.currentItem = tabIndex
+            }
         }
     }
 
