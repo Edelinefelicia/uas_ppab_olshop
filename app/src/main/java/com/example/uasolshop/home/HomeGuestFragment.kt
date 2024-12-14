@@ -68,7 +68,6 @@ class HomeGuestFragment : Fragment() {
         fetchProducts(binding)
         with(binding){
             tvSeeAll.setOnClickListener {
-//                (activity as MainActivityGuest).setFragment(ListProdukGuestFragment(), keepNavOnHome = true)
                 navigateToTab(0)
             }
             kategoriall.setOnClickListener{
