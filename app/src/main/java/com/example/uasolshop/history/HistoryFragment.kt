@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.uasolshop.HistoryAdapter.HistoryAdapter
+import com.example.uasolshop.auth.PrefManager
 import com.example.uasolshop.database.History
 import com.example.uasolshop.database.HistoryDao
 import com.example.uasolshop.database.HistoryRoomDatabase
@@ -38,6 +39,7 @@ class HistoryFragment : Fragment() {
     private var updateId: Int = 0
     val productList = ArrayList<History>()
     private lateinit var adapterGuestproduct: HistoryAdapter
+    lateinit var prefManager: PrefManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +57,7 @@ class HistoryFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        prefManager = PrefManager.getInstance(requireContext())
         // Inisialisasi ExecutorService
         executorService = Executors.newSingleThreadExecutor()
 
@@ -81,10 +84,10 @@ class HistoryFragment : Fragment() {
     private fun getAllNotes() {
         with(binding) {
             binding.recyclerViewproduct.layoutManager = LinearLayoutManager(requireContext())
-            mHistoriDao.allNotes.observe(viewLifecycleOwner) { produk ->
+            mHistoriDao.getHistoriesByUsername(prefManager.getUsername()).observe(viewLifecycleOwner) { produk ->
                 try {
                     productList.clear()
-                    productList.addAll(produk)
+                    productList.addAll(produk.reversed())
                     adapterGuestproduct.notifyDataSetChanged()
                 } catch (e: Exception) {
                     // Log the error or show a user-friendly message

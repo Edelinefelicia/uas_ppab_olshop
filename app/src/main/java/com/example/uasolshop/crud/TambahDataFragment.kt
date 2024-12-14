@@ -70,6 +70,10 @@ class TambahDataFragment : Fragment(R.layout.fragment_tambah_data) {
         with(binding) {
             buttonPickImage.setOnClickListener { pickImage() }
             btnTambah.setOnClickListener { submitProduk() }
+            back.setOnClickListener{
+                Log.d("hihiihi", "aaaa")
+                parentFragmentManager.popBackStack()
+            }
         }
     }
 
@@ -163,7 +167,14 @@ class TambahDataFragment : Fragment(R.layout.fragment_tambah_data) {
             override fun onResponse(call: Call<Products>, response: Response<Products>) {
                 if (response.isSuccessful) {
                     // Tangani jika data berhasil dikirimkan
+                    Toast.makeText(
+                        requireContext(),
+                        "Data added successfully",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
                     println("Data berhasil dikirim: ${response.body()}")
+                    parentFragmentManager.popBackStack()
                 } else {
                     // Tangani jika ada error
                     println("Error: ${response.errorBody()?.string()}")

@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.uasolshop.R
 import com.example.uasolshop.auth.PrefManager
 import com.example.uasolshop.database.History
@@ -19,6 +20,7 @@ import com.example.uasolshop.database.HistoryDao
 import com.example.uasolshop.database.HistoryRoomDatabase
 import com.example.uasolshop.databinding.FragmentBookingBinding
 import com.example.uasolshop.dataclass.Products
+import com.example.uasolshop.history.HistoryFragment
 import com.example.uasolshop.network.ApiClient
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -96,6 +98,10 @@ class BookingFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 //        historyId = id
         // Hubungkan ke NoteDao untuk menggunakan method
         with(binding){
+            back.setOnClickListener{
+                Log.d("hihiihi", "aaaa")
+                parentFragmentManager.popBackStack()
+            }
             btnTglBooking.setOnClickListener {
                 val datePicker = DatePicker(this@BookingFragment)
                 datePicker.show(parentFragmentManager, "datePicker")
@@ -170,7 +176,7 @@ class BookingFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 Toast.makeText(requireContext(), "Stok tidak cukup", Toast.LENGTH_SHORT).show()
                 return
             }
-            lifecycleScope.launch(Dispatchers.IO) {
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                 try {
                     val stokAkhir = currentStock-bookAmount
                     val jsonData = Gson().toJsonTree(
@@ -206,13 +212,22 @@ class BookingFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                         )
                     )
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Data booked successfully",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
+
+                            val safeContext = context ?: return@withContext
+                            Toast.makeText(
+                                safeContext,
+                                "Data booked successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.mainGuest, HistoryFragment())
+                            .addToBackStack(null) // Menambahkan ke backstack
+                            .commit()
+
                     }
+
+
+
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         Log.d("ProductUpload", "Error booking product: ${e.message}")

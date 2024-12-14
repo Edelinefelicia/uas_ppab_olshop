@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.uasolshop.home.HomeAdminFragment
 import com.example.uasolshop.R
@@ -44,9 +45,12 @@ class ListProdukFragment : Fragment() {
         _binding = FragmentListProdukBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
+
+
         with(binding) {
             tambahProduk.setOnClickListener {
 //                navController.navigate(R.id.action_listProdukFragment3_to_tambahDataFragment2)
@@ -68,25 +72,46 @@ class ListProdukFragment : Fragment() {
 //                transaction.addToBackStack(null) // Optionally, add to back stack if you want to use back button
 //                transaction.commit() // Commit the transaction
 //            }
-            // Handle back button click
             back.setOnClickListener {
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_container, HomeAdminFragment()) // Replace fragment
-                transaction.commit()
-//                findNavController().navigateUp()
-//                if (requireActivity().supportFragmentManager.backStackEntryCount > 0) {
-//                    requireActivity().onBackPressed() // Use onBackPressedDispatcher
+                if (parentFragmentManager.backStackEntryCount > 0) {
+                    // Jika ada fragment sebelumnya di back stack
+                    parentFragmentManager.popBackStack()
+//                    Toast.makeText(requireContext(), "Navigated back successfully", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Jika tidak ada fragment di back stack
+                    Toast.makeText(requireContext(), "No previous fragment to go back to", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            // Handle back button click
+//            back.setOnClickListener {
+//
+//                if (parentFragmentManager.popBackStack()) {
+//                    // Berhasil kembali ke fragment sebelumnya
+//                    Toast.makeText(requireContext(), "Navigated back successfully", Toast.LENGTH_SHORT).show()
 //                } else {
-//                    // Optionally handle when no backstack entry exists
+//                    // Tidak ada fragment lagi di back stack
 //                    Toast.makeText(requireContext(), "No previous fragment to go back to", Toast.LENGTH_SHORT).show()
 //                }
-            }
+////                parentFragmentManager.popBackStack()
+////                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+////                transaction.replace(R.id.fragment_container, HomeAdminFragment()) // Replace fragment
+////                transaction.commit()
+////                findNavController().navigateUp()
+////                if (requireActivity().supportFragmentManager.backStackEntryCount > 0) {
+////                    requireActivity().onBackPressed() // Use onBackPressedDispatcher
+////                } else {
+////                    // Optionally handle when no backstack entry exists
+////                    Toast.makeText(requireContext(), "No previous fragment to go back to", Toast.LENGTH_SHORT).show()
+////                }
+//            }
+            val tabIndex = arguments?.getInt("TAB_INDEX", 0) ?: 0
 
             // Initialize TabLayout and ViewPager
             val pagerAdapter = PagerAdapter(this@ListProdukFragment, parentFragmentManager) // Replace with actual FragmentPagerAdapter
             viewPager.adapter = pagerAdapter
 
-            // Set up TabLayout with ViewPager
+                                                           // Set up TabLayout with ViewPager
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
                 when (position) {
                     0 -> {
@@ -107,6 +132,10 @@ class ListProdukFragment : Fragment() {
                     }
                 }
             }.attach()
+
+            viewPager.post {
+                viewPager.currentItem = tabIndex
+            }
         }
     }
 

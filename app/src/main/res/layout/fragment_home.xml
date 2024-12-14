@@ -22,7 +22,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logonya" />
     </LinearLayout>
 
     <!-- Scrollable Content -->
@@ -62,7 +62,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="#f1f1f1"
                         android:text="Lokasi Toko: "
                         android:textSize="16sp" />
                     <TextView
@@ -70,7 +69,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="#f1f1f1"
                         android:textStyle="bold"
 
                         android:text="Graha Siena A3/9, Tangerang, Banten, 22720"
@@ -111,7 +109,7 @@
                     android:id="@+id/btn_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:layout_margin="10dp"
                     android:gravity="center"
                     android:orientation="vertical"
                     >
@@ -132,14 +130,14 @@
                         android:id="@+id/kategoriall1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/black"
                         android:text="Semua" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/btn_semen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:layout_margin="10dp"
                     android:gravity="center"
                     android:orientation="vertical"
                     >
@@ -160,28 +158,15 @@
                         android:id="@+id/kategorisemen1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/black"
                         android:text="Semen" />
                 </LinearLayout>
-
-                <!--                <androidx.appcompat.widget.AppCompatButton-->
-                <!--                    android:id="@+id/kategoriSemen"-->
-                <!--                    android:layout_width="0dp"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_weight="1"-->
-                <!--                    android:padding="15dp"-->
-                <!--                    android:layout_marginTop="10dp"-->
-                <!--                    android:layout_marginRight="10dp"-->
-                <!--                    android:drawableStart="@drawable/cement__1_"-->
-                <!--                    android:background="@drawable/rounded_button"-->
-                <!--                    android:textColor="@color/white"-->
-                <!--                    android:text="Semen" />-->
 
                 <LinearLayout
                     android:id="@+id/btn_besi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:layout_margin="10dp"
                     android:gravity="center"
                     android:orientation="vertical"
                     >
@@ -202,7 +187,7 @@
                         android:id="@+id/kategoribesi1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/black"
                         android:text="Besi" />
                 </LinearLayout>
 
@@ -211,7 +196,7 @@
                     android:id="@+id/btn_lainnya"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:layout_margin="8dp"
                     android:gravity="center"
                     android:orientation="vertical"
                     >
@@ -232,7 +217,7 @@
                         android:id="@+id/kategorilainnya1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/black"
                         android:text="Lainnya" />
                 </LinearLayout>
             </LinearLayout>
@@ -248,14 +233,14 @@
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:textSize="20sp"
-                    android:text="Top Product"/>
+                    android:text="Produk Terbaru"/>
                 <TextView
                     android:id="@+id/tv_see_all"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="textEnd"
                     android:textSize="12sp"
-                    android:textColor="@color/blue"
+                    android:textColor="@color/black"
                     android:text="Lihat Semua Kategori"/>
             </LinearLayout>
 
@@ -277,7 +262,7 @@
                     android:id="@+id/recyclerViewtopproduct"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp" />
+                    android:layout_marginBottom="20dp" />
             </LinearLayout>
 
         </LinearLayout>

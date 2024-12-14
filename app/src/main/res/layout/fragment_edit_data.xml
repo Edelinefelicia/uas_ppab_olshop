@@ -20,7 +20,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logonya" />
     </LinearLayout>
     <!--    back-->
     <LinearLayout
@@ -94,12 +94,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Pick Image"
-                    android:layout_marginTop="16dp" />
+                    android:layout_marginBottom="16dp" />
                 <TextView
                     android:id="@+id/tv_labelnamaproduk"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:gravity="center"
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/poppinsmedium"
@@ -120,7 +120,7 @@
                     android:id="@+id/tv_kategori"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:gravity="center"
                     android:fontFamily="@font/poppinsmedium"
 
@@ -136,22 +136,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:textColor="@color/white"
-                        android:buttonTint="@color/white"
+                        android:textColor="@color/black"
+                        android:buttonTint="@color/black"
                         android:text="Semen"/>
                     <RadioButton
                         android:id="@+id/radio_besi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:textColor="@color/white"
-                        android:buttonTint="@color/white"
+                        android:textColor="@color/black"
+                        android:buttonTint="@color/black"
                         android:text="Besi"/>
                     <RadioButton
                         android:id="@+id/radio_lainnya"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:text="Lainnya"/>
                 </RadioGroup>
 
@@ -159,7 +159,7 @@
                     android:id="@+id/tv_harga"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:gravity="center"
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/poppinsmedium"
@@ -180,7 +180,7 @@
                     android:id="@+id/tv_stok"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:gravity="center"
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/poppinsmedium"
@@ -201,7 +201,7 @@
                     android:id="@+id/tv_ket"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:gravity="center"
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/poppinsmedium"

@@ -210,6 +210,13 @@ class EditDataFragment(
             override fun onResponse(call: Call<Products>, response: Response<Products>) {
                 if (response.isSuccessful) {
                     // Tangani jika data berhasil dikirimkan
+                    Toast.makeText(
+                        requireContext(),
+                        "Data edited successfully",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    parentFragmentManager.popBackStack()
                     println("Data berhasil dikirim: ${response.body()}")
                 } else {
                     // Tangani jika ada error

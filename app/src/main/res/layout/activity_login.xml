@@ -7,25 +7,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="40dp"
+    android:background="@drawable/bglogin"
     android:gravity="center"
     tools:context=".auth.LoginActivity">
+
 
     <ImageView
         android:layout_width="1500dp"
         android:layout_height="150dp"
-        android:paddingBottom="20dp"
-        android:src="@drawable/logo"/>
+        android:src="@drawable/logonya"/>
     <TextView
         android:id="@+id/tv_desc_app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/blue"
+        android:textColor="@color/black"
         android:gravity="center"
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/poppinsmedium"
         android:layout_gravity="center"
         android:textSize="15sp"
-        android:text="Aplikasi ini hanya untuk melihat katalog barang bangunan serta stoknya"/>
+        android:text="Aplikasi ini untuk melihat dan booking barang bangunan"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,10 +38,10 @@
             android:id="@+id/tv_Login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:gravity="center"
             android:layout_marginBottom="20dp"
-            android:fontFamily="@font/poppinssemibold"
+            android:fontFamily="@font/poppinsbold"
             android:layout_gravity="center"
             android:textSize="20sp"
             android:text="Log In"/>
@@ -49,7 +50,7 @@
             android:id="@+id/tv_labelusername_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:gravity="center"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/poppinsmedium"
@@ -70,7 +71,7 @@
             android:id="@+id/tv_labelpass_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:gravity="center"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/poppinsmedium"

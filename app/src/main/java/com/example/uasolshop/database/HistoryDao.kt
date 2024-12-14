@@ -21,6 +21,8 @@ interface HistoryDao {
     val allNotes: LiveData<List<History>>
     @Query("SELECT * from historiprodukGB WHERE id = :id")
     suspend fun getProdukbyId(id: String): History?
+    @Query("SELECT * FROM historiprodukGB WHERE username = :username")
+    fun getHistoriesByUsername(username: String): LiveData<List<History>>
 //    @Query("UPDATE historiprodukGB SET stok = stok-1 WHERE id= :id")
 //    suspend fun decreaseStok(id: String)
 
